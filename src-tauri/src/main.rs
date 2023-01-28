@@ -10,12 +10,6 @@ use window_shadows::set_shadow;
 
 mod commands;
 
-#[derive(Clone, serde::Serialize)]
-struct Payload {
-  argv: Vec<String>,
-  cwd: String,
-}
-
 fn gen_system_tray() -> SystemTray {
   let tray_menu = SystemTrayMenu::new()
     .add_item(CustomMenuItem::new("show".to_string(), "Show"))
@@ -46,10 +40,13 @@ fn main() {
       focus(&main_window);
 
       main_window
-        .emit("second-instance", Payload { argv, cwd })
+        .emit("commandline", commands::CommandlinePayload { argv, cwd })
         .unwrap();
     }))
-    .invoke_handler(tauri::generate_handler![commands::update_msg])
+    .invoke_handler(tauri::generate_handler![
+      commands::update_msg,
+      commands::get_commandline
+    ])
     .system_tray(gen_system_tray())
     .on_system_tray_event(|app, event| {
       let main_window = app.get_window("main").unwrap();

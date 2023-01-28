@@ -2,7 +2,7 @@
   <div>
     <h1>{{ msg }}</h1>
     <v-btn @click="updateMsg">{{ count }}</v-btn>
-    <div>{{ secondInstancePayload }}</div>
+    <div>{{ commandlinePayload }}</div>
     <div>line</div>
     <div>line</div>
     <div>line</div>
@@ -41,19 +41,35 @@ import { appWindow } from '@tauri-apps/api/window'
 register('CmdOrControl+Shift+Alt+H', () => appWindow.hide())
 register('CmdOrControl+Shift+Alt+S', () => appWindow.show())
 
-type EventPayload = {
+type CommandlinePayload = {
   argv: string[]
   cwd: string
 }
-const secondInstancePayload = ref<EventPayload>({
+const commandlinePayload = ref<CommandlinePayload>({
   argv: [],
   cwd: '',
 })
 
-listen('second-instance', (e: { payload: EventPayload }) => {
-  console.log('second-instance', { e })
-  secondInstancePayload.value = e.payload
+function receiveCommandline(payload: CommandlinePayload) {
+  commandlinePayload.value = payload
+}
+
+listen('commandline', (e: { payload: CommandlinePayload }) => {
+  console.log('commandline', { e })
+  receiveCommandline(e.payload)
 })
+
+invoke('get_commandline').then((payload: unknown) => {
+  const isCommandlinePayload = (data: unknown): data is CommandlinePayload => {
+    const payload = data as CommandlinePayload
+    return Array.isArray(payload?.argv) && typeof payload?.cwd === 'string'
+  }
+  if (!isCommandlinePayload(payload)) {
+    return
+  }
+  receiveCommandline(payload)
+})
+
 
 const props = withDefaults(
   defineProps<{ msg: string; titles: { left: string; right: string } }>(),
