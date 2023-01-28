@@ -26,6 +26,7 @@ fn gen_system_tray() -> SystemTray {
   return system_tray;
 }
 
+#[allow(unused_must_use)]
 fn focus(win: &Window) {
   win.show();
   win.unminimize();
