@@ -37,6 +37,8 @@ import { ref } from 'vue'
 import { listen } from '@tauri-apps/api/event'
 import { register } from '@tauri-apps/api/globalShortcut'
 import { appWindow } from '@tauri-apps/api/window'
+import { initConfig } from '../utils/config'
+
 
 register('CmdOrControl+Shift+Alt+H', () => appWindow.hide())
 register('CmdOrControl+Shift+Alt+S', () => appWindow.show())
@@ -70,7 +72,6 @@ invoke('get_commandline').then((payload: unknown) => {
   receiveCommandline(payload)
 })
 
-
 const props = withDefaults(
   defineProps<{ msg: string; titles: { left: string; right: string } }>(),
   {
@@ -88,6 +89,11 @@ async function updateMsg() {
   count.value++
   emits('update:titles', { ...props.titles, right: String(count.value) })
 }
+
+;(async () => {
+  const config = await initConfig()
+  config.value2 = new Date().getTime()
+})()
 </script>
 
 <style scoped></style>
