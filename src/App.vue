@@ -31,7 +31,32 @@ const titles = ref({
   background-color: #ccc;
   border-radius: 8px;
 }
+@font-face {
+  font-family: 'Cica';
+  src: url('/public/Cica-Regular.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Cica';
+  src: url('/public/Cica-Bold.ttf');
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Cica';
+  src: url('/public/Cica-RegularItalic.ttf');
+  font-weight: normal;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Cica';
+  src: url('/public/Cica-BoldItalic.ttf');
+  font-weight: bold;
+  font-style: italic;
+}
 body {
+  font-family: 'Cica';
   width: 100vw;
   &::-webkit-scrollbar {
     width: 0;
