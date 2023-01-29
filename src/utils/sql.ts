@@ -5,10 +5,6 @@ import Database from 'tauri-plugin-sql-api'
 let dbPromise: Promise<Database> | undefined = undefined
 
 export async function getDb(): Promise<Database> {
-  if (dbPromise) {
-    return await dbPromise
-  }
-
   dbPromise ??= (async () => {
     const payload = await invoke('get_commandline').then((payload: unknown) => {
       const isCommandlinePayload = (
@@ -28,5 +24,5 @@ export async function getDb(): Promise<Database> {
 
     return Database.load(`sqlite:${exeDir}\\info.sq3`)
   })()
-  return getDb()
+  return await dbPromise
 }
