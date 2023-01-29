@@ -1,6 +1,6 @@
 <template>
   <h1>{{ msg }}</h1>
-  <button type="button" @click="updateMsg">count is {{ count }}</button>
+  <v-btn @click="updateMsg">{{ count }}</v-btn>
 </template>
 
 <script setup lang="ts">
