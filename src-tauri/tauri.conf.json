@@ -12,7 +12,12 @@
   },
   "tauri": {
     "allowlist": {
-      "all": false
+      "all": false,
+      "window": {
+        "minimize": true,
+        "close": true,
+        "startDragging": true
+      }
     },
     "bundle": {
       "active": true,
@@ -57,9 +62,10 @@
       {
         "fullscreen": false,
         "height": 600,
+        "width": 800,
         "resizable": true,
         "title": "tauri-vue3-template",
-        "width": 800
+        "decorations": false
       }
     ]
   }
