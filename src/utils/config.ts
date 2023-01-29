@@ -73,28 +73,23 @@ export async function initConfig(): Promise<Config> {
   )
   if (!isConfig(config)) throw new Error('configの読み込みに失敗しました')
 
-  const dbUpdaters = Object.fromEntries(
-    Object.keys(defaultConfig).map((key) => [
-      key,
-      throttle((value) => {
-        console.log('db updated', { key, value })
-        db.execute(`UPDATE configs SET value = $2 WHERE key = $1;`, [
-          key,
-          String(value),
-        ])
-      }, 1000),
-    ])
-  )
+  const dbUpdaters: { [K in ConfigKey]?: Function } = {}
+  Object.fromEntries(Object.keys(defaultConfig).map((key) => [key]))
   type ProxyHandler<T extends object> = {
     set(obj: T, prop: string, value: any): boolean
   }
   const proxyHandler: ProxyHandler<Config> = {
     set(obj: Config, prop: string, value) {
-      const dbUpdater = dbUpdaters[prop]
-      if (!isConfigKey(prop) || dbUpdater === undefined) {
+      if (!isConfigKey(prop)) {
         return false
       }
       Object.assign(obj, { [prop]: value })
+      const dbUpdater = (dbUpdaters[prop] ??= throttle((value) => {
+        db.execute(`UPDATE configs SET value = $2 WHERE key = $1;`, [
+          prop,
+          String(value),
+        ])
+      }, 1000))
       dbUpdater(value)
       return true
     },
