@@ -29,7 +29,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.tauri.dev",
+      "identifier": "net.482f.tauri.tauri-vue3-template",
       "longDescription": "",
       "macOS": {
         "entitlements": null,
