@@ -1,4 +1,4 @@
-import Database from 'tauri-plugin-sql-api'
+import { getDb } from './sql'
 
 const defaultConfig = {
   value1: 'default value1',
@@ -28,7 +28,7 @@ function isConfig(config: object): config is Config {
 }
 
 export async function initConfig(): Promise<Config> {
-  const db = await Database.load('sqlite:info.sq3')
+  const db = await getDb()
   await db.execute(`
     CREATE TABLE IF NOT EXISTS configs (
       key   TEXT NOT NULL PRIMARY KEY,
