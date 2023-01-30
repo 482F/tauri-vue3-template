@@ -41,7 +41,11 @@ import { listen } from '@tauri-apps/api/event'
 import { register } from '@tauri-apps/api/globalShortcut'
 import { appWindow } from '@tauri-apps/api/window'
 import { defaultConfig, initConfig } from '../utils/config'
-import { CommandlinePayload } from '../utils/common'
+import { CommandlinePayload, ObjectMap } from '../utils/common'
+console.log({
+  ObjectMap,
+  result: ObjectMap({ a: 41, b: 42, c: 43 }, ([key, num]) => [key, String(num * num)]),
+})
 
 register('CmdOrControl+Shift+Alt+H', () => appWindow.hide())
 register('CmdOrControl+Shift+Alt+S', () => appWindow.show())
