@@ -35,6 +35,11 @@
 import { invoke } from '@tauri-apps/api'
 import { ref } from 'vue'
 import { listen } from '@tauri-apps/api/event'
+import { register } from '@tauri-apps/api/globalShortcut'
+import { appWindow } from '@tauri-apps/api/window'
+
+register('CmdOrControl+Shift+Alt+H', () => appWindow.hide())
+register('CmdOrControl+Shift+Alt+S', () => appWindow.show())
 
 type EventPayload = {
   argv: string[]
