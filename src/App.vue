@@ -1,14 +1,14 @@
 <template>
   <v-app id="app">
     <Titlebar
-      v-if="current.titlebar"
+      v-if="currentWindow.titlebar"
       class="titlebar"
       :left-title="titles.left"
       :right-title="titles.right"
     />
     <Suspense>
       <component
-        :is="current.component"
+        :is="currentWindow.component"
         class="main-component"
         v-model:titles="titles"
       />
@@ -18,23 +18,13 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import MainComponent from './components/MainComponent.vue'
-import ConfigSetting from './components/ConfigSetting.vue'
 import Titlebar from './components/Titlebar.vue'
+import { currentWindow } from './utils/common'
 
 const titles = ref({
   left: 'tauri-vue3-template',
   right: '',
 })
-
-const current = ref(
-  {
-    Config: { component: ConfigSetting, titlebar: false },
-  }[location?.href?.match?.(/(?<=#).+$/)?.[0] ?? ''] ?? {
-    component: MainComponent,
-    titlebar: true,
-  }
-)
 </script>
 
 <style lang="scss">
