@@ -64,7 +64,7 @@ function isHash(value: unknown): value is Hash {
 
 const currentHash = location?.href?.match?.(/(?<=#).+$/)?.[0] || 'Default'
 if (!isHash(currentHash)) {
-  throw new Error()
+  throw new Error('ハッシュ値が不正です')
 }
 
 export const currentWindow = windows[currentHash]
