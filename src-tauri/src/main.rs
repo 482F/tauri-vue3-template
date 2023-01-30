@@ -3,8 +3,10 @@
   windows_subsystem = "windows"
 )]
 
+use tauri::{
+  CustomMenuItem, Manager, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem, Window,
+};
 use window_shadows::set_shadow;
-use tauri::{Manager, CustomMenuItem, SystemTrayMenu, SystemTrayMenuItem, SystemTray, Window, SystemTrayEvent};
 
 mod commands;
 
@@ -20,9 +22,8 @@ fn gen_system_tray() -> SystemTray {
     .add_native_item(SystemTrayMenuItem::Separator)
     .add_item(CustomMenuItem::new("quit".to_string(), "Quit"));
 
-
   let system_tray = SystemTray::new().with_menu(tray_menu);
-  return system_tray
+  return system_tray;
 }
 
 fn focus(win: &Window) {
@@ -43,21 +44,27 @@ fn main() {
 
       focus(&main_window);
 
-      main_window.emit("second-instance", Payload { argv, cwd }).unwrap();
+      main_window
+        .emit("second-instance", Payload { argv, cwd })
+        .unwrap();
     }))
     .invoke_handler(tauri::generate_handler![commands::update_msg])
     .system_tray(gen_system_tray())
     .on_system_tray_event(|app, event| {
       let main_window = app.get_window("main").unwrap();
       match event {
-        SystemTrayEvent::DoubleClick {..} => { focus(&main_window); }
-        SystemTrayEvent::MenuItemClick { id, .. } => {
-          match id.as_str() {
-            "quit" => { std::process::exit(0); }
-            "show" => { focus(&main_window); }
-            _ => {}
-          }
+        SystemTrayEvent::DoubleClick { .. } => {
+          focus(&main_window);
         }
+        SystemTrayEvent::MenuItemClick { id, .. } => match id.as_str() {
+          "quit" => {
+            std::process::exit(0);
+          }
+          "show" => {
+            focus(&main_window);
+          }
+          _ => {}
+        },
         _ => {}
       }
     })
