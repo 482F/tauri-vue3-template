@@ -3,6 +3,7 @@
     <h1>{{ msg }}</h1>
     <v-btn @click="updateMsg">{{ count }}</v-btn>
     <div>{{ commandlinePayload }}</div>
+    <div>location.href: {{ lh }}</div>
     {{ config }}
     <v-text-field v-model="config.value1" />
     <v-slider v-model="config.value2" />
@@ -51,6 +52,9 @@ const commandlinePayload = ref<CommandlinePayload>({
   argv: [],
   cwd: '',
 })
+
+const lh = ref('')
+setInterval(() => lh.value = location.href, 1000)
 
 function receiveCommandline(payload: CommandlinePayload) {
   commandlinePayload.value = payload
