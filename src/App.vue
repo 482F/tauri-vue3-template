@@ -6,11 +6,13 @@
       :left-title="titles.left"
       :right-title="titles.right"
     />
-    <component
-      :is="current.component"
-      class="main-component"
-      v-model:titles="titles"
-    />
+    <Suspense>
+      <component
+        :is="current.component"
+        class="main-component"
+        v-model:titles="titles"
+      />
+    </Suspense>
   </v-app>
 </template>
 

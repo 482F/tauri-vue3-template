@@ -1,9 +1,20 @@
 <template>
-  <SubComponent
-    v-model:msg="msg"
-    :titles="props.titles"
-    @update:titles="$emit('update:titles', $event)"
-  />
+  <div>
+    <Suspense>
+      <SubComponent
+        v-model:msg="msg"
+        :titles="props.titles"
+        @update:titles="$emit('update:titles', $event)"
+      />
+    </Suspense>
+    <Suspense>
+      <SubComponent
+        v-model:msg="msg"
+        :titles="props.titles"
+        @update:titles="$emit('update:titles', $event)"
+      />
+    </Suspense>
+  </div>
 </template>
 
 <script setup lang="ts">
