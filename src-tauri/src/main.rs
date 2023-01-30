@@ -43,6 +43,7 @@ fn main() {
         .emit("commandline", commands::CommandlinePayload { argv, cwd })
         .unwrap();
     }))
+    .plugin(tauri_plugin_sql::TauriSql::default())
     .invoke_handler(tauri::generate_handler![
       commands::update_msg,
       commands::get_commandline
