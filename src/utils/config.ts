@@ -56,7 +56,7 @@ export async function getConfig(): Promise<RefConfig> {
       );`)
     const records: PartialConfig = Object.fromEntries(
       await db
-        .select<{ key: string; value: string }[]>(`SELECT * FROM configs`)
+        .select<{ key: ConfigKey; value: string }>(`SELECT * FROM configs`)
         .then((rawRecords) =>
           rawRecords.map((rawRecord) => [rawRecord.key, rawRecord.value])
         )
