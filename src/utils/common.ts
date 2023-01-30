@@ -47,13 +47,6 @@ export type CommandlinePayload = {
   cwd: string
 }
 
-export function ObjectMap<T, U>(
-  obj: { [K: string]: T },
-  func: (entry: [string, T], index: number) => [string, U]
-) {
-  return Object.fromEntries(Object.entries(obj).map(func))
-}
-
 export function createWindow(
   label: string,
   hash?: string,
