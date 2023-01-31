@@ -26,7 +26,7 @@ const _Object = {
     return Object.fromEntries(
       Object.entries(obj).map(([key, value]) => [
         key,
-        func(value, key as keyof T),
+        func(value, key),
       ])
     )
     // function isKeyofT(key: unknown): key is keyof T {
