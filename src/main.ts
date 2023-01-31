@@ -13,28 +13,22 @@ const _nonNullable = <T>(value: T): value is NonNullable<T> => value != null
 declare global {
   var nonNullable: typeof _nonNullable
 }
-var nonNullable = _nonNullable
+window.nonNullable = _nonNullable
 
-const originalObjectKeys = Object.keys
 type Key = string | number | symbol
+type Valueof<T> = T extends { [k in keyof T]: infer U } ? U : never
 
 const _Object = {
-  keys: function <T extends object>(obj: T): (keyof T)[] {
-    return originalObjectKeys(obj) as (keyof T)[]
-  },
   map: function <T extends object, U>(
     obj: T,
-    func: (
-      value: T extends { [k: Key]: infer V } ? V : never,
-      key: keyof T
-    ) => U
+    func: (value: Valueof<T>, key: keyof T) => U
   ): { [k in keyof T]: U } {
     return Object.fromEntries(
       Object.entries(obj).map(([key, value]) => [
         key,
         func(value, key as keyof T),
       ])
-    ) as { [k in keyof T]: U }
+    )
     // function isKeyofT(key: unknown): key is keyof T {
     //   if (!((key as Key) in obj)) {
     //     return false
@@ -68,15 +62,12 @@ const _Object = {
   },
   asyncMap: async function <T extends object, U>(
     obj: T,
-    asyncFunc: (
-      value: T extends { [k: Key]: infer V } ? V : never,
-      key: keyof T
-    ) => Promise<U>
+    asyncFunc: (value: Valueof<T>, key: keyof T) => Promise<U>
   ): Promise<{ [k in keyof T]: U }> {
     type ReturnType = { [k in keyof T]: U }
     const promiseObj = _Object.map(obj, asyncFunc)
     const newObj: Partial<ReturnType> = {}
-    const keys = _Object.keys(promiseObj)
+    const keys = Object.keys(promiseObj)
     for (const key of keys) {
       newObj[key] = await promiseObj[key]
     }
@@ -86,12 +77,15 @@ const _Object = {
 
 declare global {
   interface Object {
-    _keys: typeof _Object.keys
     map: typeof _Object.map
     asyncMap: typeof _Object.asyncMap
   }
+  interface ObjectConstructor {
+    keys<T extends object>(obj: T): (keyof T)[]
+    entries<T extends object>(obj: T): [keyof T, Valueof<T>][]
+    fromEntries<T extends Key, U>(entries: [T, U][]): { [k in T]: U }
+  }
 }
 
-Object._keys = _Object.keys
 Object.map = _Object.map
 Object.asyncMap = _Object.asyncMap
