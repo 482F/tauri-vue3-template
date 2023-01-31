@@ -1,11 +1,12 @@
 import { getDb } from './sql'
+import throttle from 'lodash/throttle'
 
-const defaultConfig = {
+export const defaultConfig = {
   value1: 'default value1',
   value2: 42,
 }
 
-type Config = typeof defaultConfig
+export type Config = typeof defaultConfig
 type ConfigKey = keyof Config
 type ConfigValue = Config[ConfigKey]
 type PartialConfig = {
@@ -72,19 +73,29 @@ export async function initConfig(): Promise<Config> {
   )
   if (!isConfig(config)) throw new Error('configの読み込みに失敗しました')
 
+  const dbUpdaters = Object.fromEntries(
+    Object.keys(defaultConfig).map((key) => [
+      key,
+      throttle((value) => {
+        console.log('db updated', { key, value })
+        db.execute(`UPDATE configs SET value = $2 WHERE key = $1;`, [
+          key,
+          String(value),
+        ])
+      }, 1000),
+    ])
+  )
   type ProxyHandler<T extends object> = {
     set(obj: T, prop: string, value: any): boolean
   }
   const proxyHandler: ProxyHandler<Config> = {
     set(obj: Config, prop: string, value) {
-      if (!isConfigKey(prop)) {
+      const dbUpdater = dbUpdaters[prop]
+      if (!isConfigKey(prop) || dbUpdater === undefined) {
         return false
       }
       Object.assign(obj, { [prop]: value })
-      db.execute(`UPDATE configs SET value = $2 WHERE key = $1;`, [
-        prop,
-        String(value),
-      ])
+      dbUpdater(value)
       return true
     },
   }

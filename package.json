@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@tauri-apps/api": "^1.2.0",
+    "lodash": "^4.17.21",
     "tauri-plugin-sql-api": "https://github.com/tauri-apps/tauri-plugin-sql",
     "vue": "^3.2.45",
     "vuetify": "^3.1.2"
@@ -18,6 +19,7 @@
   "devDependencies": {
     "@mdi/js": "^7.1.96",
     "@tauri-apps/cli": "^1.2.3",
+    "@types/lodash": "^4.14.191",
     "@vitejs/plugin-vue": "^4.0.0",
     "sass": "^1.57.1",
     "typescript": "^4.9.3",
