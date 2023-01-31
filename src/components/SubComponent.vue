@@ -1,9 +1,10 @@
 <template>
-  <div>
+  <div v-if="ready">
     <h1>{{ msg }}</h1>
     <v-btn @click="updateMsg">{{ count }}</v-btn>
     <div>{{ commandlinePayload }}</div>
     {{ config }}
+    <v-text-field v-model="config.value1" />
     <v-slider v-model="config.value2" />
     <div>line</div>
     <div>line</div>
@@ -89,8 +90,10 @@ async function updateMsg() {
 }
 
 const config = ref(defaultConfig)
+const ready = ref(false)
 ;(async () => {
   config.value = await initConfig()
+  ready.value = true
 })()
 </script>
 
