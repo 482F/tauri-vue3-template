@@ -14,7 +14,7 @@ export async function wait(
   let result = null
   while (!result && !timeouted) {
     result = await func()
-    await gp.$sleep(intervalMs)
+    await sleep(intervalMs)
   }
   return result
 }
