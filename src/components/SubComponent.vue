@@ -6,7 +6,7 @@
     {{ config }}
     <v-text-field v-model="config.value1" />
     <v-slider v-model="config.value2" />
-    <div>line</div>
+    <div :a="$console.log('A', config)">line</div>
     <div>line</div>
     <div>line</div>
     <div>line</div>
