@@ -18,3 +18,8 @@ export async function wait(
   }
   return result
 }
+
+export type CommandlinePayload = {
+  argv: string[]
+  cwd: string
+}

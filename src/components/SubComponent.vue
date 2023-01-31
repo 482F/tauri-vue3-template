@@ -38,15 +38,11 @@ import { listen } from '@tauri-apps/api/event'
 import { register } from '@tauri-apps/api/globalShortcut'
 import { appWindow } from '@tauri-apps/api/window'
 import { initConfig } from '../utils/config'
-
+import { CommandlinePayload } from '../utils/common'
 
 register('CmdOrControl+Shift+Alt+H', () => appWindow.hide())
 register('CmdOrControl+Shift+Alt+S', () => appWindow.show())
 
-type CommandlinePayload = {
-  argv: string[]
-  cwd: string
-}
 const commandlinePayload = ref<CommandlinePayload>({
   argv: [],
   cwd: '',
