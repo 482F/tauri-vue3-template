@@ -24,10 +24,7 @@ const _Object = {
     func: (value: Valueof<T>, key: keyof T) => U
   ): { [k in keyof T]: U } {
     return Object.fromEntries(
-      Object.entries(obj).map(([key, value]) => [
-        key,
-        func(value, key),
-      ])
+      Object.entries(obj).map(([key, value]) => [key, func(value, key)])
     )
     // function isKeyofT(key: unknown): key is keyof T {
     //   if (!((key as Key) in obj)) {
@@ -76,6 +73,11 @@ const _Object = {
 }
 
 declare global {
+  interface Array<T> {
+    asyncMap: <U>(
+      func: (value: T, i: number) => Promise<U>
+    ) => Promise<Array<U>>
+  }
   interface Object {
     map: typeof _Object.map
     asyncMap: typeof _Object.asyncMap
@@ -87,5 +89,11 @@ declare global {
   }
 }
 
+Array.prototype.asyncMap = async function <T, U>(
+  this: Array<T>,
+  func: (value: T, i: number) => Promise<U>
+): Promise<Array<U>> {
+  return await Promise.all(this.map(func))
+}
 Object.map = _Object.map
 Object.asyncMap = _Object.asyncMap
