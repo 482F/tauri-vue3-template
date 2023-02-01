@@ -4,7 +4,26 @@ import Database from 'tauri-plugin-sql-api'
 
 let dbPromise: Promise<Database> | undefined = undefined
 
-export async function getDb(): Promise<Database> {
+class EDatabase extends Database {
+  select<T extends object[]>(
+    query: string,
+    bindValues?: unknown[] | undefined
+  ): Promise<T>
+
+  select<T extends object>(
+    query: string,
+    bindValues?: unknown[] | undefined
+  ): Promise<T[]>
+
+  async select<T>(query: string, bindValues?: unknown[] | undefined) {
+    const selectFunc = Database.prototype.select<
+      (T extends (infer U)[] ? U : T)[]
+    >
+    return await selectFunc.call(this, query, bindValues)
+  }
+}
+
+export async function getDb(): Promise<EDatabase> {
   dbPromise ??= (async () => {
     const payload = await invoke('get_commandline').then((payload: unknown) => {
       const isCommandlinePayload = (
@@ -22,7 +41,7 @@ export async function getDb(): Promise<Database> {
     if (!payload) throw new Error('実行ファイルのパスが取得できませんでした')
     const exeDir = payload.argv[0]?.replace(/\\?[^\\]+$/, '')
 
-    return Database.load(`sqlite:${exeDir}\\info.sq3`)
+    return EDatabase.load(`sqlite:${exeDir}\\info.sq3`)
   })()
   return await dbPromise
 }
