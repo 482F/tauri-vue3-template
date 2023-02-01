@@ -53,7 +53,7 @@ export function createWindow(
   title?: string,
   options: WindowOptions = {}
 ) {
-  const url = location.href.replace(/#.+$/, '') + (hash ? '#' + hash : '')
+  const url = hash ? '#' + hash : ''
   const defaultOptions: WindowOptions = {
     url,
     title,
