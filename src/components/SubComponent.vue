@@ -1,5 +1,5 @@
 <template>
-  <div v-if="ready">
+  <div v-if="config">
     <h1>{{ msg }}</h1>
     <v-btn @click="updateMsg">{{ count }}</v-btn>
     <div>{{ commandlinePayload }}</div>
@@ -41,7 +41,7 @@ import { ref } from 'vue'
 import { listen } from '@tauri-apps/api/event'
 import { register } from '@tauri-apps/api/globalShortcut'
 import { appWindow } from '@tauri-apps/api/window'
-import { defaultConfig, initConfig } from '../utils/config'
+import { getConfig } from '../utils/config'
 import { CommandlinePayload, ObjectMap, createWindow } from '../utils/common'
 console.log({
   ObjectMap,
@@ -97,27 +97,10 @@ async function updateMsg() {
   emits('update:titles', { ...props.titles, right: String(count.value) })
 }
 
-const config = ref(defaultConfig)
-const ready = ref(false)
-;(async () => {
-  config.value = await initConfig()
-  ready.value = true
-})()
+const config = await getConfig()
 
 function createSubWindow() {
-  const webview = createWindow('theUniqueLabel', 'Config')
-  // const webview = new WebviewWindow('theUniqueLabel', {
-  //   url: 'http://localhost:5173/#Config',
-  // })
-  console.log({ webview })
-  // webview.once('tauri://created', function () {
-  //   webview.show()
-  //   // webview window successfully created
-  // })
-  // webview.once('tauri://error', function (e) {
-  //   console.error(e)
-  //   // an error occurred during webview window creation
-  // })
+  createWindow('theUniqueLabel', 'Config', 'abc')
 }
 </script>
 

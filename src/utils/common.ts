@@ -1,4 +1,4 @@
-import { appWindow, WebviewWindow } from '@tauri-apps/api/window'
+import { WebviewWindow, WindowOptions } from '@tauri-apps/api/window'
 
 export function sleep(ms: number = 100) {
   new Promise((resolve) => setTimeout(resolve, ms))
@@ -21,6 +21,27 @@ export async function wait(
   return result
 }
 
+type TauriEvent = {
+  event: string
+  id: number
+  payload: unknown
+  windowLabel: string
+}
+export function isTauriEvent(value: unknown): value is TauriEvent {
+  if (!value || typeof value !== 'object') {
+    return false
+  }
+  const tauriEvent = value as Record<keyof TauriEvent, unknown>
+  if (
+    typeof tauriEvent.event !== 'string' ||
+    typeof tauriEvent.id !== 'number' ||
+    !('payload' in tauriEvent) ||
+    typeof tauriEvent.windowLabel !== 'string'
+  ) {
+    return false
+  }
+  return true
+}
 export type CommandlinePayload = {
   argv: string[]
   cwd: string
@@ -33,10 +54,14 @@ export function ObjectMap<T, U>(
   return Object.fromEntries(Object.entries(obj).map(func))
 }
 
-export function createWindow(label: string, hash = '', title = '') {
+export function createWindow(
+  label: string,
+  hash?: string,
+  title?: string,
+  options: WindowOptions = {}
+) {
   const url = location.href.replace(/#.+$/, '') + (hash ? '#' + hash : '')
-  title ||= document.title
-  const webview = new WebviewWindow(label, {
+  const defaultOptions: WindowOptions = {
     url,
     title,
     fullscreen: false,
@@ -44,6 +69,8 @@ export function createWindow(label: string, hash = '', title = '') {
     width: 800,
     resizable: true,
     decorations: false,
-  })
+  }
+  title ??= document.title
+  const webview = new WebviewWindow(label, { ...defaultOptions, ...options })
   return webview
 }
