@@ -1,1 +1,0 @@
-yarn tauri icon --help
