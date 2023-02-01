@@ -43,7 +43,7 @@ function isConfig(config: unknown): config is Config {
 }
 
 type RefConfig = ReturnType<typeof ref<Config>> & { [emitted]?: boolean }
-let refConfig: RefConfig
+let refConfig: RefConfig | undefined
 let configProxyPromise: Promise<Config> | undefined = undefined
 
 export async function getConfig(): Promise<RefConfig> {
@@ -104,7 +104,7 @@ export async function getConfig(): Promise<RefConfig> {
           return false
         }
         Object.assign(obj, { [prop]: value })
-        if (refConfig[emitted]) {
+        if (refConfig?.[emitted]) {
           return true
         }
         const dbUpdater = (dbUpdaters[prop] ??= throttle((value) => {
@@ -129,7 +129,7 @@ export async function getConfig(): Promise<RefConfig> {
   if (!configProxy) {
     throw new Error()
   }
-  refConfig = ref(configProxy)
+  refConfig ??= ref(configProxy)
   return refConfig
 }
 
@@ -152,15 +152,12 @@ function isUpdateConfigEventPayload(
 }
 
 listen('update-config', async (e: unknown) => {
-  if (!isTauriEvent(e)) {
-    return
-  }
-
-  if (e.windowLabel === appWindow.label) {
-    return
-  }
-
-  if (!isUpdateConfigEventPayload(e.payload)) {
+  if (
+    !isTauriEvent(e) ||
+    !refConfig?.value ||
+    e.windowLabel === appWindow.label ||
+    !isUpdateConfigEventPayload(e.payload)
+  ) {
     return
   }
 
@@ -172,9 +169,6 @@ listen('update-config', async (e: unknown) => {
 
   const { key, value } = e.payload
   refConfig[emitted] = true
-  if (!isConfig(refConfig.value)) {
-    return
-  }
   Object.assign(refConfig.value, { [key]: value })
   refConfig[emitted] = false
 })
