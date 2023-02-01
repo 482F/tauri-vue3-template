@@ -47,9 +47,31 @@ export type CommandlinePayload = {
   cwd: string
 }
 
+import MainComponent from '../components/MainComponent.vue'
+import ConfigSetting from '../components/ConfigSetting.vue'
+
+const windows = {
+  Config: { component: ConfigSetting, titlebar: false },
+  Default: { component: MainComponent, titlebar: true },
+} as const
+type Hash = keyof typeof windows
+function isHash(value: unknown): value is Hash {
+  if (!Object.keys(windows).includes(value as string)) {
+    return false
+  }
+  return true
+}
+
+const currentHash = location?.href?.match?.(/(?<=#).+$/)?.[0] || 'Default'
+if (!isHash(currentHash)) {
+  throw new Error()
+}
+
+export const currentWindow = windows[currentHash]
+
 export function createWindow(
   label: string,
-  hash?: string,
+  hash: Hash,
   title?: string,
   options: WindowOptions = {}
 ) {
