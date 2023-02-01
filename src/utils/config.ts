@@ -61,33 +61,26 @@ export async function getConfig(): Promise<RefConfig> {
           rawRecords.map((rawRecord) => [rawRecord.key, rawRecord.value])
         )
     )
-    const initialConfigValue = Object.fromEntries(
-      await Promise.all(
-        Object.entries(defaultConfig).map(async ([key, defaultValue]) => {
-          if (!isConfigKey(key)) return
-          const value = await (async () => {
-            const result = records[key]
+    const initialConfigValue = await Object.asyncMap(
+      defaultConfig,
+      async (defaultValue, key) => {
+        const value = await (async () => {
+          const result = records[key]
 
-            if (result === undefined) {
-              await db.execute(`INSERT INTO configs VALUES($1, $2)`, [
-                key,
-                defaultValue,
-              ])
-            }
-            const rawValue = result ?? defaultValue
-            if (typeof defaultValue === 'number') {
-              return Number(rawValue)
-            }
-            return rawValue
-          })()
-          const entry: [ConfigKey, ConfigValue] = [key, value]
-          return entry
-        })
-      ).then((r) =>
-        r.filter(
-          (entry): entry is NonNullable<typeof entry> => entry !== undefined
-        )
-      )
+          if (result === undefined) {
+            await db.execute(`INSERT INTO configs VALUES($1, $2)`, [
+              key,
+              defaultValue,
+            ])
+          }
+          const rawValue = result ?? defaultValue
+          if (typeof defaultValue === 'number') {
+            return Number(rawValue)
+          }
+          return rawValue
+        })()
+        return value
+      }
     )
     if (!isConfig(initialConfigValue))
       throw new Error('configの読み込みに失敗しました')
