@@ -6,6 +6,7 @@
     {{ config }}
     <v-text-field v-model="config.value1" />
     <v-slider v-model="config.value2" />
+    <v-btn @click="createSubWindow">sub Window</v-btn>
     <div :a="$console.log('A', config)">line</div>
     <div>line</div>
     <div>line</div>
@@ -41,10 +42,13 @@ import { listen } from '@tauri-apps/api/event'
 import { register } from '@tauri-apps/api/globalShortcut'
 import { appWindow } from '@tauri-apps/api/window'
 import { defaultConfig, initConfig } from '../utils/config'
-import { CommandlinePayload, ObjectMap } from '../utils/common'
+import { CommandlinePayload, ObjectMap, createWindow } from '../utils/common'
 console.log({
   ObjectMap,
-  result: ObjectMap({ a: 41, b: 42, c: 43 }, ([key, num]) => [key, String(num * num)]),
+  result: ObjectMap({ a: 41, b: 42, c: 43 }, ([key, num]) => [
+    key,
+    String(num * num),
+  ]),
 })
 
 register('CmdOrControl+Shift+Alt+H', () => appWindow.hide())
@@ -99,6 +103,22 @@ const ready = ref(false)
   config.value = await initConfig()
   ready.value = true
 })()
+
+function createSubWindow() {
+  const webview = createWindow('theUniqueLabel', 'Config')
+  // const webview = new WebviewWindow('theUniqueLabel', {
+  //   url: 'http://localhost:5173/#Config',
+  // })
+  console.log({ webview })
+  // webview.once('tauri://created', function () {
+  //   webview.show()
+  //   // webview window successfully created
+  // })
+  // webview.once('tauri://error', function (e) {
+  //   console.error(e)
+  //   // an error occurred during webview window creation
+  // })
+}
 </script>
 
 <style scoped></style>

@@ -4,6 +4,7 @@ import throttle from 'lodash/throttle'
 export const defaultConfig = {
   value1: 'default value1',
   value2: 42,
+  value3: 10,
 }
 
 export type Config = typeof defaultConfig

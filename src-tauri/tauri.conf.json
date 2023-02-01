@@ -20,6 +20,7 @@
         "all": true
       },
       "window": {
+        "create": true,
         "hide": true,
         "show": true,
         "minimize": true,

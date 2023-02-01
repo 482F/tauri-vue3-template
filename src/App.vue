@@ -1,23 +1,38 @@
 <template>
   <v-app id="app">
     <Titlebar
+      v-if="current.titlebar"
       class="titlebar"
       :left-title="titles.left"
       :right-title="titles.right"
     />
-    <MainComponent class="main-component" v-model:titles="titles" />
+    <component
+      :is="current.component"
+      class="main-component"
+      v-model:titles="titles"
+    />
   </v-app>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import MainComponent from './components/MainComponent.vue'
+import ConfigSetting from './components/ConfigSetting.vue'
 import Titlebar from './components/Titlebar.vue'
 
 const titles = ref({
   left: 'tauri-vue3-template',
   right: '',
 })
+
+const current = ref(
+  {
+    Config: { component: ConfigSetting, titlebar: false },
+  }[location?.href?.match?.(/(?<=#).+$/)?.[0] ?? ''] ?? {
+    component: MainComponent,
+    titlebar: true,
+  }
+)
 </script>
 
 <style lang="scss">
