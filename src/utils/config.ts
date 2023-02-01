@@ -120,7 +120,7 @@ export async function getConfig(): Promise<RefConfig> {
   })()
   const configProxy = await configProxyPromise
   if (!configProxy) {
-    throw new Error()
+    throw new Error('configの読み込みに失敗しました')
   }
   refConfig ??= ref(configProxy)
   return refConfig
