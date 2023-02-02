@@ -40,25 +40,25 @@ const titles = ref({
 }
 @font-face {
   font-family: 'Cica';
-  src: url('/public/Cica-Regular.ttf');
+  src: url('/Cica-Regular.ttf');
   font-weight: normal;
   font-style: normal;
 }
 @font-face {
   font-family: 'Cica';
-  src: url('/public/Cica-Bold.ttf');
+  src: url('/Cica-Bold.ttf');
   font-weight: bold;
   font-style: normal;
 }
 @font-face {
   font-family: 'Cica';
-  src: url('/public/Cica-RegularItalic.ttf');
+  src: url('/Cica-RegularItalic.ttf');
   font-weight: normal;
   font-style: italic;
 }
 @font-face {
   font-family: 'Cica';
-  src: url('/public/Cica-BoldItalic.ttf');
+  src: url('/Cica-BoldItalic.ttf');
   font-weight: bold;
   font-style: italic;
 }
