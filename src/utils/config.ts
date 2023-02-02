@@ -54,7 +54,7 @@ export async function getConfig(): Promise<RefConfig> {
         key   TEXT NOT NULL PRIMARY KEY,
         value TEXT NOT NULL
       );`)
-    const records: PartialConfig = Object.fromEntries(
+    const records = Object.fromEntries(
       await db
         .select<{ key: ConfigKey; value: string }>(`SELECT * FROM configs`)
         .then((rawRecords) =>

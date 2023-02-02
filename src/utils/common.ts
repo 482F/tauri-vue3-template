@@ -56,7 +56,7 @@ const windows = {
 } as const
 type Hash = keyof typeof windows
 function isHash(value: unknown): value is Hash {
-  if (!Object.keys(windows).includes(value as string)) {
+  if (!Object.keys(windows).includes(value as Hash)) {
     return false
   }
   return true
