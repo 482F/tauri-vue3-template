@@ -10,6 +10,24 @@ use window_shadows::set_shadow;
 
 mod commands;
 
+#[cfg(not(dev))]
+fn apply_plugin_only_dev<R: tauri_runtime::Runtime<tauri::EventLoopMessage>>(
+  builder: tauri::Builder<R>,
+  plugin: tauri::plugin::TauriPlugin<R>,
+) -> tauri::Builder<R> {
+  println!("applied");
+  builder.plugin(plugin)
+}
+
+#[cfg(dev)]
+fn apply_plugin_only_dev<R: tauri_runtime::Runtime<tauri::EventLoopMessage>>(
+  builder: tauri::Builder<R>,
+  _plugin: tauri::plugin::TauriPlugin<R>,
+) -> tauri::Builder<R> {
+  println!("not applied");
+  builder
+}
+
 fn gen_system_tray() -> SystemTray {
   let tray_menu = SystemTrayMenu::new()
     .add_item(CustomMenuItem::new("show".to_string(), "Show"))
@@ -28,13 +46,17 @@ fn focus(win: &Window) {
 }
 
 fn main() {
-  tauri::Builder::default()
-    .setup(|app| {
-      let main_window = app.get_window("main").unwrap();
-      set_shadow(&main_window, true).unwrap();
-      Ok(())
-    })
-    .plugin(tauri_plugin_single_instance::init(|app, argv, cwd| {
+  let mut builder = tauri::Builder::default();
+
+  builder = builder.setup(|app| {
+    let main_window = app.get_window("main").unwrap();
+    set_shadow(&main_window, true).unwrap();
+    Ok(())
+  });
+
+  builder = apply_plugin_only_dev(
+    builder,
+    tauri_plugin_single_instance::init(|app, argv, cwd| {
       let main_window = app.get_window("main").unwrap();
 
       focus(&main_window);
@@ -42,7 +64,10 @@ fn main() {
       main_window
         .emit("commandline", commands::CommandlinePayload { argv, cwd })
         .unwrap();
-    }))
+    }),
+  );
+
+  builder
     .plugin(tauri_plugin_sql::TauriSql::default())
     .invoke_handler(tauri::generate_handler![
       commands::update_msg,
