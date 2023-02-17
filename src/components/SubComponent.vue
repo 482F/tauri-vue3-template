@@ -5,10 +5,15 @@
     <div>{{ commandlinePayload }}</div>
     <div>location.href: {{ lh }}</div>
     {{ config }}
+    <v-text-field
+      v-model="config.colors.color1.value"
+      @-update:model-value="(val: string) => {
+        config.colors.color1.value = val
+      }"
+    />
     <v-text-field v-model="config.value1" />
     <v-slider v-model="config.value2" />
     <v-btn @click="createSubWindow">sub Window</v-btn>
-    <div :a="$console.log('A', config)">line</div>
     <div>line</div>
     <div>line</div>
     <div>line</div>
@@ -54,7 +59,7 @@ const commandlinePayload = ref<CommandlinePayload>({
 })
 
 const lh = ref('')
-setInterval(() => lh.value = location.href, 1000)
+setInterval(() => (lh.value = location.href), 1000)
 
 function receiveCommandline(payload: CommandlinePayload) {
   commandlinePayload.value = payload

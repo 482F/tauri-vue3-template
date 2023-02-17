@@ -1,5 +1,10 @@
 <template>
-  <v-app id="app">
+  <v-app
+    id="app"
+    :style="{
+      ...configColorStyles,
+    }"
+  >
     <Titlebar
       v-if="currentWindow.titlebar"
       class="titlebar"
@@ -17,14 +22,38 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, Ref, computed } from 'vue'
 import Titlebar from './components/Titlebar.vue'
-import { currentWindow } from './utils/common'
+import { currentWindow, Valueof } from './utils/common'
+import { getConfig, RefConfig } from './utils/config'
 
 const titles = ref({
   left: 'tauri-vue3-template',
   right: '',
 })
+
+const configColors: Ref<Record<string, Valueof<RefConfig['value']['colors']>>> =
+  ref({})
+getConfig().then((config) => {
+  configColors.value = config.value.colors
+})
+const configColorStyles = computed(() => {
+  return Object.fromEntries(
+    Object.entries(configColors.value).map(([key, { value }]) => [
+      '--' + key,
+      value,
+    ])
+  )
+})
+// const configColorStyles: Ref<{ [x: string]: string }> = ref({})
+// getConfig().then((config) => {
+//   configColorStyles.value = Object.fromEntries(
+//     Object.entries(config.value.colors).map(([key, { value }]) => [
+//       '--' + key,
+//       value,
+//     ])
+//   )
+// })
 </script>
 
 <style lang="scss">
@@ -83,7 +112,7 @@ body {
         width: 100%;
       }
       .titlebar {
-        background-color: #ddd;
+        background-color: var(--titlebar);
         flex-shrink: 0;
         flex-grow: 0;
         height: 30px;
