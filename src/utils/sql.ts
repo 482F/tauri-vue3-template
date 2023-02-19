@@ -4,7 +4,7 @@ import Database from 'tauri-plugin-sql-api'
 
 let dbPromise: Promise<Database> | undefined = undefined
 
-class EDatabase extends Database {
+export class EDatabase extends Database {
   select<T extends object[]>(
     query: string,
     bindValues?: unknown[] | undefined

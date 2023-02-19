@@ -3,6 +3,7 @@ import './style.css'
 import App from './App.vue'
 import vuetify from './plugins/vuetify'
 import { commonPlugin } from './plugins/common'
+import { Key, Valueof } from './utils/common'
 
 const app = createApp(App)
 app.use(vuetify)
@@ -14,9 +15,6 @@ declare global {
   var nonNullable: typeof _nonNullable
 }
 window.nonNullable = _nonNullable
-
-type Key = string | number | symbol
-type Valueof<T> = T extends { [k in keyof T]: infer U } ? U : never
 
 const _Object = {
   map: function <T extends object, U>(
@@ -73,13 +71,19 @@ const _Object = {
 }
 
 declare global {
-  interface Array<T> {
-    asyncMap: <U>(
-      func: (value: T, i: number) => Promise<U>
-    ) => Promise<Array<U>>
-  }
   interface Object {
-    map: typeof _Object.map
+    map: {
+      <T extends object, V>(
+        obj: T,
+        func: (value: Valueof<T>, key: keyof T) => V
+      ): {
+        [k in keyof T]: V
+      }
+      <T extends object>(
+        obj: T,
+        func: (value: Valueof<T>, key: keyof T) => Valueof<T>
+      ): T
+    }
     asyncMap: typeof _Object.asyncMap
   }
   interface ObjectConstructor {
@@ -89,11 +93,5 @@ declare global {
   }
 }
 
-Array.prototype.asyncMap = async function <T, U>(
-  this: Array<T>,
-  func: (value: T, i: number) => Promise<U>
-): Promise<Array<U>> {
-  return await Promise.all(this.map(func))
-}
 Object.map = _Object.map
 Object.asyncMap = _Object.asyncMap
