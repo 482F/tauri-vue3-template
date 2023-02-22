@@ -94,9 +94,9 @@ export type Key = string | number | symbol
 export type Valueof<T> = T extends { [k in keyof T]: infer U } ? U : never
 
 export type JsonKey = string | number
-export type JsonPrimitive = string | number | null
+export type JsonPrimitive = string | number | boolean | null
 export function isJsonPrimitive(val: unknown): val is JsonPrimitive {
-  return !(val as boolean) || ['string', 'number'].includes(typeof val)
+  return !(val as boolean) || ['string', 'number', 'boolean'].includes(typeof val)
 }
 export type JsonArray = Json[]
 export type JsonObject = { [x: JsonKey]: Json }
