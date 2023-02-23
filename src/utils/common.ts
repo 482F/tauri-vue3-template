@@ -54,11 +54,11 @@ type Window = {
 }
 const windows = {
   Config: {
-    getComponent: () => import('../components/config/ConfigSetting.vue'),
+    getComponent: () => import('../components/config/config-setting.vue'),
     titlebar: true,
   },
   Default: {
-    getComponent: () => import('../components/MainComponent.vue'),
+    getComponent: () => import('../components/main-component.vue'),
     titlebar: true,
   },
 } as const satisfies { [x: string]: Window }

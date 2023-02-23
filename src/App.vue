@@ -5,25 +5,25 @@
       ...configColorStyles,
     }"
   >
-    <Titlebar
+    <titlebar
       v-if="currentWindow.titlebar"
       class="titlebar"
       :left-title="titles.left"
       :right-title="titles.right"
     />
-    <Suspense>
+    <suspense>
       <component
         :is="currentComponent"
         class="main-component"
         v-model:titles="titles"
       />
-    </Suspense>
+    </suspense>
   </v-app>
 </template>
 
 <script setup lang="ts">
 import { ref, Ref, computed, defineComponent } from 'vue'
-import Titlebar from './components/Titlebar.vue'
+import Titlebar from './components/titlebar.vue'
 import { currentWindow, Valueof } from './utils/common'
 import { getConfig, RefConfig } from './utils/config'
 
