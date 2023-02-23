@@ -13,7 +13,7 @@
     />
     <Suspense>
       <component
-        :is="currentWindow.component"
+        :is="currentComponent"
         class="main-component"
         v-model:titles="titles"
       />
@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, Ref, computed } from 'vue'
+import { ref, Ref, computed, defineComponent } from 'vue'
 import Titlebar from './components/Titlebar.vue'
 import { currentWindow, Valueof } from './utils/common'
 import { getConfig, RefConfig } from './utils/config'
@@ -45,15 +45,11 @@ const configColorStyles = computed(() => {
     ])
   )
 })
-// const configColorStyles: Ref<{ [x: string]: string }> = ref({})
-// getConfig().then((config) => {
-//   configColorStyles.value = Object.fromEntries(
-//     Object.entries(config.value.colors).map(([key, { value }]) => [
-//       '--' + key,
-//       value,
-//     ])
-//   )
-// })
+let currentComponent: Ref<undefined | ReturnType<typeof defineComponent>> =
+  ref(undefined)
+currentWindow.getComponent().then((component) => {
+  currentComponent.value = component.default
+})
 </script>
 
 <style lang="scss">
