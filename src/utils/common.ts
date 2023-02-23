@@ -55,7 +55,7 @@ type Window = {
 const windows = {
   Config: {
     getComponent: () => import('../components/config/ConfigSetting.vue'),
-    titlebar: false,
+    titlebar: true,
   },
   Default: {
     getComponent: () => import('../components/MainComponent.vue'),
@@ -117,7 +117,7 @@ export type Json = JsonNonPrimitive | JsonPrimitive
 export function isJson(val: unknown): val is Json {
   if (
     val === null ||
-    ['string', 'number'].includes(typeof val) ||
+    ['string', 'number', 'boolean'].includes(typeof val) ||
     val instanceof Object
   )
     return true
