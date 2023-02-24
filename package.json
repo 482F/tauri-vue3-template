@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "ps": "powershell.exe /c yarn",
-    "dev": "vite",
+    "dev": "yarn ps tauri dev",
     "build": "vue-tsc && vite build",
     "preview": "vite preview"
   },
