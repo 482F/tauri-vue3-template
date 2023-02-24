@@ -156,6 +156,8 @@ async function getInitialConfig(db: EDatabase): Promise<Config> {
     const value = (() => {
       if (typeof defaultValue === 'number') {
         return Number(rawValue)
+      } else if (typeof defaultValue === 'boolean') {
+        return rawValue === 'true' ? true : false
       } else {
         return rawValue
       }
