@@ -15,9 +15,9 @@ import { listen } from '@tauri-apps/api/event'
 import { appWindow } from '@tauri-apps/api/window'
 
 const defaultConfig = {
-  value1: 'default value1',
-  value2: 42,
-  value3: 10,
+  string: 'default value1',
+  number: 42,
+  boolean: false,
   colors: {
     titlebar: { name: 'titlebar', label: 'タイトルバー', value: 'lightgray' },
     color1: { name: 'color1', label: '色1', value: 'lightblue' },

@@ -11,8 +11,8 @@
         config.colors.color1.value = val
       }"
     />
-    <v-text-field v-model="config.value1" />
-    <v-slider v-model="config.value2" />
+    <v-text-field v-model="config.string" />
+    <v-slider v-model="config.number" />
     <v-btn @click="createSubWindow">sub Window</v-btn>
     <div>line</div>
     <div>line</div>

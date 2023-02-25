@@ -1,9 +1,8 @@
 <template>
   <div v-if="config" class="config-setting">
-    {{ config }}
-    <v-text-field v-model="config.value1" />
-    <v-slider v-model="config.value2" />
-    <v-slider v-model="config.value3" />
+    <v-text-field v-model="config.string" />
+    <v-slider v-model="config.number" />
+    <v-switch v-model="config.boolean" />
     <div
       :style="{
         'width': '100px',
@@ -13,7 +12,7 @@
     />
     <div class="colors">
       <template
-        v-for="(color, i) of config.colors"
+        v-for="(color) of config.colors"
         :key="color.name"
         class="color-row"
       >
@@ -25,7 +24,7 @@
 </template>
 
 <script lang="ts" setup>
-import { getConfig } from '../utils/config'
+import { getConfig } from '../../utils/config'
 
 const config = await getConfig()
 </script>
