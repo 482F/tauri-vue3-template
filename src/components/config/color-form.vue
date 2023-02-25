@@ -8,7 +8,7 @@
     ></div>
     <v-menu :close-on-content-click="false" :min-width="0">
       <template v-slot:activator="{ props }">
-        <ATextField
+        <a-text-field
           :model-value="modelValue"
           @update:model-value="$emit('update:model-value', $event)"
           v-bind="props"
@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import ATextField from '../atoms/ATextField.vue'
+import ATextField from '../atoms/a-text-field.vue'
 import { ref, Ref, computed } from 'vue'
 
 const props = defineProps<{ modelValue: string; label: string }>()

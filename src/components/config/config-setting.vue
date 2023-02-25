@@ -1,10 +1,10 @@
 <template>
   <div v-if="config" class="config-setting">
-    <ConfigValueForm label="string" v-model="config.string" />
-    <ConfigValueForm label="number" v-model="config.number" />
-    <ConfigValueForm label="boolean" v-model="config.boolean" />
+    <config-value-form label="string" v-model="config.string" />
+    <config-value-form label="number" v-model="config.number" />
+    <config-value-form label="boolean" v-model="config.boolean" />
     <v-divider class="divider" />
-    <ColorForm
+    <color-form
       v-for="color of config.colors"
       :label="color.label"
       v-model="color.value"
@@ -14,8 +14,8 @@
 
 <script lang="ts" setup>
 import { getConfig } from '../../utils/config'
-import ConfigValueForm from './ConfigValueForm.vue'
-import ColorForm from './ColorForm.vue'
+import ConfigValueForm from './config-value-form.vue'
+import ColorForm from './color-form.vue'
 
 const config = await getConfig()
 </script>

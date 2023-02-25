@@ -1,24 +1,24 @@
 <template>
   <div>
-    <Suspense>
-      <SubComponent
+    <suspense>
+      <sub-component
         v-model:msg="msg"
         :titles="props.titles"
         @update:titles="$emit('update:titles', $event)"
       />
-    </Suspense>
-    <Suspense>
-      <SubComponent
+    </suspense>
+    <suspense>
+      <sub-component
         v-model:msg="msg"
         :titles="props.titles"
         @update:titles="$emit('update:titles', $event)"
       />
-    </Suspense>
+    </suspense>
   </div>
 </template>
 
 <script setup lang="ts">
-import SubComponent from './SubComponent.vue'
+import SubComponent from './sub-component.vue'
 
 import { ref } from 'vue'
 const msg = ref('initial msg')

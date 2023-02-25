@@ -1,23 +1,23 @@
 <template>
   <div class="label">{{ label }}:&nbsp;</div>
   <div v-if="typeof modelValue === 'number'" class="number-form">
-    <ATextField
+    <a-text-field
       :model-value="modelValue"
       @update:model-value="$emit('update:model-value', Math.round($event))"
     />
-    <ASlider
+    <a-slider
       :model-value="modelValue"
       @update:model-value="$emit('update:model-value', Math.round($event))"
     />
   </div>
   <div v-else-if="typeof modelValue === 'string'">
-    <ATextField
+    <a-text-field
       :model-value="modelValue"
       @update:model-value="$emit('update:model-value', $event)"
     />
   </div>
   <div v-else-if="typeof modelValue === 'boolean'">
-    <ASwitch
+    <a-switch
       :model-value="modelValue"
       @update:model-value="$emit('update:model-value', $event)"
     />
@@ -25,9 +25,9 @@
 </template>
 
 <script setup lang="ts">
-import ATextField from '../atoms/ATextField.vue'
-import ASlider from '../atoms/ASlider.vue'
-import ASwitch from '../atoms/ASwitch.vue'
+import ATextField from '../atoms/a-text-field.vue'
+import ASlider from '../atoms/a-slider.vue'
+import ASwitch from '../atoms/a-switch.vue'
 
 defineProps<{ modelValue: number | string | boolean; label: string }>()
 </script>
