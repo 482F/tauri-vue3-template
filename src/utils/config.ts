@@ -14,15 +14,19 @@ import { emit } from '@tauri-apps/api/event'
 import { listen } from '@tauri-apps/api/event'
 import { appWindow } from '@tauri-apps/api/window'
 
+export type ColorConfig = {
+  label: string
+  value: string
+}
 const defaultConfig = {
   string: 'default value1',
   number: 42,
   boolean: false,
   colors: {
-    titlebar: { name: 'titlebar', label: 'タイトルバー', value: 'lightgray' },
-    color1: { name: 'color1', label: '色1', value: 'lightblue' },
-    color2: { name: 'color2', label: '色2', value: '#333000' },
-  },
+    titlebar: { label: 'タイトルバー', value: 'lightgray' },
+    color1: { label: '色1', value: 'lightblue' },
+    color2: { label: '色2', value: '#333000' },
+  } satisfies { [x: string]: ColorConfig },
 }
 
 const keySymbol = Symbol('key')

@@ -1,40 +1,36 @@
 <template>
   <div v-if="config" class="config-setting">
-    <v-text-field v-model="config.string" />
-    <v-slider v-model="config.number" />
-    <v-switch v-model="config.boolean" />
-    <div
-      :style="{
-        'width': '100px',
-        'height': '100px',
-        'background-color': 'var(--color1)',
-      }"
+    <ConfigValueForm label="string" v-model="config.string" />
+    <ConfigValueForm label="number" v-model="config.number" />
+    <ConfigValueForm label="boolean" v-model="config.boolean" />
+    <v-divider class="divider" />
+    <ColorForm
+      v-for="color of config.colors"
+      :label="color.label"
+      v-model="color.value"
     />
-    <div class="colors">
-      <template
-        v-for="(color) of config.colors"
-        :key="color.name"
-        class="color-row"
-      >
-        <div>{{ color.label }}:&nbsp;</div>
-        <v-text-field v-model="color.value" />
-      </template>
-    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { getConfig } from '../../utils/config'
+import ConfigValueForm from './ConfigValueForm.vue'
+import ColorForm from './ColorForm.vue'
 
 const config = await getConfig()
 </script>
 
 <style lang="scss" scoped>
 .config-setting {
-  .colors {
-    display: grid;
-    grid-template: 1fr / max-content 1fr;
-    align-items: center;
+  padding: 24px;
+  text-align: left;
+  display: grid;
+  grid-template: 1fr / max-content 1fr;
+  align-items: center;
+  gap: 8px 0px;
+  > .divider {
+    margin: 8px 0px;
+    grid-area: 1 span / 2 span;
   }
 }
 </style>

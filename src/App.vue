@@ -114,7 +114,6 @@ body {
         height: 30px;
       }
       .main-component {
-        flex-grow: 1;
         flex-shrink: 1;
         min-height: 0;
         overflow: auto;
