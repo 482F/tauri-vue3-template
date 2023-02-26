@@ -21,6 +21,10 @@ export class EDatabase extends Database {
     >
     return await selectFunc.call(this, query, bindValues)
   }
+  static async load(path: string) {
+    await Database.load(path) // rust 側で DB の読み込み準備を行っている
+    return new EDatabase(path)
+  }
 }
 
 export async function getDb(): Promise<EDatabase> {
