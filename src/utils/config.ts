@@ -194,7 +194,11 @@ const proxyHandler = {
         ]} である必要があります`
       )
 
-    obj[anyProp] = value as any
+    if (isJsonPrimitive(obj[anyProp])) {
+      obj[anyProp] = value as any
+    } else {
+      Object.assign(obj[anyProp] ?? {}, value as any)
+    }
 
     if (!refConfig || refConfig[emittedSymbol]) {
       return true
