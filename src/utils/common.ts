@@ -105,7 +105,7 @@ export type JsonKey = string | number
 export type JsonPrimitive = string | number | boolean | null
 export function isJsonPrimitive(val: unknown): val is JsonPrimitive {
   return (
-    !(val as boolean) || ['string', 'number', 'boolean'].includes(typeof val)
+    val === null || ['string', 'number', 'boolean'].includes(typeof val)
   )
 }
 export type JsonArray = Json[]
